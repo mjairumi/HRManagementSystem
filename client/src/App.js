@@ -11,6 +11,8 @@ function App() {
     wage: 0,
   });
 
+  const [allEmployees, setAllEmployees] = useState([]);
+
   function handleChange(event) {
     const { name, value } = event.target;
     setEm((prev) => {
@@ -24,6 +26,11 @@ function App() {
   function handleOnClick() {
     Axios.post("http://localhost:3001/create", { emInfo: emInfo }).then(() => {
       console.log("Info Submitted");
+    });
+  }
+  function showEmployees() {
+    Axios.get("http://localhost:3001/employees").then((response) => {
+      setAllEmployees(response.data);
     });
   }
   return (
@@ -65,6 +72,15 @@ function App() {
           onChange={handleChange}
         />
         <button onClick={handleOnClick}>Add Employeer</button>
+      </div>
+      <hr width="100%" />
+      <div className="data-base">
+        <button onClick={showEmployees}>Show Employees</button>
+        <ol>
+          {allEmployees.map((employee) => {
+            return <li>  {employee.name} {employee.age} {employee.country} {employee.position}{employee.wage}</li>;
+          })}
+        </ol>
       </div>
     </div>
   );
